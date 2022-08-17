@@ -9,4 +9,4 @@ This is a weather forcasting application. when any user download this applicatio
 
 ![git_weather_](https://user-images.githubusercontent.com/89797141/185196787-636a7a92-82b5-4b2b-aa93-e92dc477f848.jpg)
 
-This a simple view of my project's Splash Screen , Home Page , and Search Page.
+
