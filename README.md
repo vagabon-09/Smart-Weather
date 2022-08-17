@@ -4,6 +4,7 @@ This is a weather forcasting application. when any user download this applicatio
  - Fast Android Networking
  - Weather Api
  - Java Programming Language
+ - Picasoo 
 
 # Preview of Application
 
