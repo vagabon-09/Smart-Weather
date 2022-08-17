@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,10 +10,11 @@
         android:id="@+id/hm_nav_id"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="-336dp">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/search_card_id"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
 
@@ -41,11 +42,25 @@
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:padding="@dimen/_5sdp"
+
                     android:textCursorDrawable="@drawable/cursore_edit_text" />
 
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+
     </RelativeLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/mic_icon_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        android:scaleType="fitCenter"
+        android:src="@drawable/mic_icon"
+        android:layout_alignRight="@+id/hm_nav_id"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_11sdp"
+        />
+</RelativeLayout>
