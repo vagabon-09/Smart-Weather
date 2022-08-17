@@ -9,7 +9,9 @@
     <RelativeLayout
         android:id="@+id/hm_nav_id"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -31,15 +33,15 @@
                     android:id="@+id/edit_search_field_id"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                   android:layout_marginStart="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_marginStart="@dimen/_15sdp"
                     android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
                     android:layout_marginBottom="@dimen/_7sdp"
-                    android:padding="@dimen/_5sdp"
-                    android:inputType="text"
+                    android:background="@drawable/search_bar"
                     android:imeOptions="actionSearch"
-                    android:textCursorDrawable="@drawable/cursore_edit_text"
-                    android:background="@drawable/search_bar"/>
+                    android:inputType="text"
+                    android:padding="@dimen/_5sdp"
+                    android:textCursorDrawable="@drawable/cursore_edit_text" />
 
 
             </LinearLayout>

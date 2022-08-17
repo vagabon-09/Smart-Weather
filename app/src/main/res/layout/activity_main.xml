@@ -16,8 +16,6 @@
             android:backgroundTint="@color/blue"
             android:elevation="@dimen/_10sdp"
             app:cardPreventCornerOverlap="false"
-
-
             app:cardElevation="@dimen/_10sdp">
 
             <LinearLayout
