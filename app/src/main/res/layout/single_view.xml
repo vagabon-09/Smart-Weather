@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_110sdp"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/shade_blue"
+    android:layout_marginStart="@dimen/_10sdp"
+    android:layout_marginEnd="@dimen/_5sdp"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:layout_marginBottom="@dimen/_5sdp"
+    app:cardCornerRadius="@dimen/_10sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/s_temp_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/temp_icon"
+        android:drawablePadding="@dimen/_5sdp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="@string/temp_c"
+        android:textSize="@dimen/_13sdp"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/_5sdp"
+        android:textColor="@color/white"/>
+
+    <ImageView
+        android:id="@+id/s_weatherIcon_id"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:src="@drawable/weather_icon"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/s_weatherType_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/weather_type"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/_5sdp"/>
+
+    <TextView
+        android:id="@+id/s_windSpeed_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wind_card"
+        android:drawableStart="@drawable/wind_white_icon"
+        android:gravity="center"
+        android:drawablePadding="@dimen/_5sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/s_time_id"
+        android:text="10:18 AM"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"/>
+
+
+
+</LinearLayout>
+
+</androidx.cardview.widget.CardView>

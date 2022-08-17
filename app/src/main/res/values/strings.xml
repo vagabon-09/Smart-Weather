@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Smart Weather</string>
+    <string name="temp_card">---</string>
+    <string name="wind_card">---</string>
+    <string name="locality_card">---</string>
+    <string name="date_card">Last updated at: 10:56 AM</string>
+    <string name="sunrise_sund_details">05:30 AM</string>
+    <string name="sun_set_sun_details">06:20 PM</string>
+    <string name="splash_title">Smart Weather</string>
+    <string name="today_forecast">Today Forecast</string>
+    <string name="today_date">22-08-22</string>
+    <string name="weather_type">Light Rain</string>
+    <string name="twomorrow_forecast">Tomorrow Forecast</string>
+    <string name="temp_c">26°C</string>
+</resources>
