@@ -61,6 +61,5 @@
         android:src="@drawable/mic_icon"
         android:layout_alignRight="@+id/hm_nav_id"
         android:layout_marginEnd="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        />
+        android:layout_marginTop="@dimen/_11sdp" />
 </RelativeLayout>
