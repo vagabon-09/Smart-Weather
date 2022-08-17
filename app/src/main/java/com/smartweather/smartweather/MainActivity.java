@@ -1,13 +1,21 @@
 package com.smartweather.smartweather;
 
+import static com.smartweather.smartweather.R.layout.popup_card_weather;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -16,7 +24,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,8 +57,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
    private TextView tempTv,windTv,localityTv,weatherTypeTv,weatherDateTv,Title_todayDate,Title_tomorrowDate,Title_overmDate;
+   private CardView card_view_btn;
    private ImageView weatherIconImgv,searchBtn;
-    private String base_url;
     private String search;
     int REQUEST_CODE = 101;
     LocationManager locationManager;
@@ -58,12 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<weatherData> weatherDataArrayList1;
     private ArrayList<weatherData> weatherDataArrayList2;
     private ArrayList<conditonData>conditonDataArrayList;
-    private ArrayList<conditonData> conditonDataArrayList1;
-    private ArrayList<conditonData> conditonDataArrayList2;
     private RecyclerView recyclerView,tmr_rv,ovrm_rv;
-    private weatherAdapter adapter;
-    private tomorrowAdapter adapter2;
-    private overmorrowAdapter adapter3;
     Gson gson = new Gson();
     private String cnvtdTime, today_title_date;
     String city = "";
@@ -82,12 +87,13 @@ public class MainActivity extends AppCompatActivity {
         //Get search value
         getSearchValue();
         //get weather forecast data according to the search data
+        String base_url;
         if (search!=null){
-            base_url="https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q="+search+"&days=10&aqi=yes&alerts=yes";
+            base_url ="https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q="+search+"&days=10&aqi=yes&alerts=yes";
             getData(base_url);
         }else{
             givePermissions();
-            base_url="https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q="+city+"&days=10&aqi=yes&alerts=yes";
+            base_url ="https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q="+city+"&days=10&aqi=yes&alerts=yes";
             getData(base_url);
         }
 
@@ -95,8 +101,29 @@ public class MainActivity extends AppCompatActivity {
         tmr_rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,true));
         ovrm_rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,true));
 
+        card_view_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopUp();
+            }
+        });
+
     }
-        //Asking users for Location Access..
+
+    @SuppressLint("ResourceType")
+    private void showPopUp() {
+        AlertDialog.Builder dilogBuilder = new AlertDialog.Builder(this);
+        final View view = getLayoutInflater().inflate(popup_card_weather,null);
+        dilogBuilder.setView(view);
+        AlertDialog dialog = dilogBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        ((ViewGroup) dialog.getWindow().getDecorView()).getChildAt(0).startAnimation(AnimationUtils.loadAnimation(
+                MainActivity.this,android.R.anim.slide_in_left));
+        dialog.show();
+    }
+
+
+    //Asking users for Location Access..
     private void givePermissions() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
@@ -122,8 +149,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 addressList = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
                 city = addressList.get(0).getLocality();
-                Log.d("Locality ", "getLoation: "+city);
-                Log.d("AddressList ", "getLoation: "+addressList.toString());
+                Log.d("Locality ", "getLocation: "+city);
+                Log.d("AddressList ", "getLocation: "+addressList.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -271,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void overmorrowData(JSONArray overmorrow_hour) {
-        conditonDataArrayList2 = new ArrayList<>();
+        ArrayList<conditonData> conditonDataArrayList2 = new ArrayList<>();
         for (int i=overmorrow_hour.length()-1; i>=0; i--){
             try {
                 JSONObject overmorrow_array = overmorrow_hour.getJSONObject(i);
@@ -280,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
                 conditonData overmorrow_condition_view  = gson.fromJson(overmorrow_condition.toString(),conditonData.class);
                 conditonDataArrayList2.add(overmorrow_condition_view);
                 weatherDataArrayList2.add(overmorrow_data);
-                adapter3 = new overmorrowAdapter(weatherDataArrayList2,conditonDataArrayList2,MainActivity.this);
+                overmorrowAdapter adapter3 = new overmorrowAdapter(weatherDataArrayList2, conditonDataArrayList2, MainActivity.this);
                 ovrm_rv.setAdapter(adapter3);
 //                Log.d("Overmorrow", "overmorrowData: "+overmorrow_array.toString());
             } catch (JSONException e) {
@@ -291,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void tomorrowData(JSONArray tomorrow_hour) {
-        conditonDataArrayList1 = new ArrayList<>();
+        ArrayList<conditonData> conditonDataArrayList1 = new ArrayList<>();
         for (int i=tomorrow_hour.length()-1; i>=0;i--){
 
             try {
@@ -303,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
                 conditonDataArrayList1.add(tmr_condition_view);
                 //For tomorrow data
                 weatherDataArrayList1.add(tomorrow_data);
-                adapter2 = new tomorrowAdapter(weatherDataArrayList1,conditonDataArrayList1,MainActivity.this);
+                tomorrowAdapter adapter2 = new tomorrowAdapter(weatherDataArrayList1, conditonDataArrayList1, MainActivity.this);
                 tmr_rv.setAdapter(adapter2);
 
             } catch (JSONException e) {
@@ -324,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
                 weatherDataList.add(today_weather);
                 conditonDataArrayList.add(condito_data);
                 //Setting adapter
-                adapter = new weatherAdapter(MainActivity.this,weatherDataList,conditonDataArrayList);
+                weatherAdapter adapter = new weatherAdapter(MainActivity.this, weatherDataList, conditonDataArrayList);
                 recyclerView.setAdapter(adapter);
 //                Log.d("Today Hour", "todaySetData: "+tdyData.toString());
             } catch (JSONException e) {
@@ -351,21 +378,21 @@ public class MainActivity extends AppCompatActivity {
     //Title Date
     private void convetTime2(String today_date) {
         String date_s = today_date;
-        SimpleDateFormat dt = new SimpleDateFormat("yyyyy-mm-dd");
+        SimpleDateFormat dt = new SimpleDateFormat("yyyyy-MM-dd");
         Date date2 = null;
         try {
             date2 = dt.parse(date_s);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        SimpleDateFormat dt1 = new SimpleDateFormat("dd-mm-yy");
+        SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yy");
         today_title_date = dt1.format(date2);
     }
 
     //Converting time for details card
     private void convetTime(String localTime) {
         String date_s = localTime;
-        SimpleDateFormat dt = new SimpleDateFormat("yyyyy-mm-dd hh:mm");
+        SimpleDateFormat dt = new SimpleDateFormat("yyyyy-MM-dd hh:mm");
         Date date = null;
         try {
             date = dt.parse(date_s);
@@ -393,6 +420,7 @@ public class MainActivity extends AppCompatActivity {
         Title_tomorrowDate = findViewById(R.id.tomorrow_date_title_id);
         Title_overmDate = findViewById(R.id.trd_date_title_id);
         searchBtn = findViewById(R.id.search_button_id);
+        card_view_btn = findViewById(R.id.card1);
 
     }
 }

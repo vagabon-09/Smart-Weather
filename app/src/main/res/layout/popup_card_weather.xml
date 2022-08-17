@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/_221sdp"
+        android:layout_height="@dimen/_360sdp"
+        android:backgroundTint="@color/shade_blue"
+        android:elevation="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_10sdp"
+        app:cardElevation="@dimen/_10sdp"
+        app:cardPreventCornerOverlap="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left|center"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pup_temp_c_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/temp_icon"
+                android:drawablePadding="@dimen/_15sdp"
+                android:text="10 °C"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/white"/>
+
+                <TextView
+                android:id="@+id/pup_temp_f_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/temp_icon"
+                android:drawablePadding="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="40 °F"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/white"/>
+
+
+
+                   <TextView
+                android:id="@+id/pup_weather_type_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/small_cloud_icon"
+                android:drawablePadding="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="Light Rain"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/white"/>
+
+
+
+                   <TextView
+                android:id="@+id/pup_wind_speed_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/wind_white_icon"
+                android:drawablePadding="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="5 km/h"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/white"/>
+
+
+
+                   <TextView
+                android:id="@+id/pup_uv_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/small_uv_icon"
+                android:drawablePadding="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="40 °F"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/white"/>
+
+
+
+                   <TextView
+                android:id="@+id/pup_sun_rise_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/sun_set_white_icon"
+                android:drawablePadding="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="10:30 AM"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/white"/>
+
+
+
+                   <TextView
+                android:id="@+id/pup_sun_set_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/sun_set_white_icon"
+                android:drawablePadding="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="05:30 AM"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/white"/>
+
+
+
+                   <TextView
+                android:id="@+id/pup_moon_rise_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/moon_rise"
+                android:drawablePadding="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="06:30 PM"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/white"/>
+
+
+
+                   <TextView
+                android:id="@+id/pup_moon_set_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/moon_set"
+                android:drawablePadding="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="40 °F"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/white"/>
+
+
+
+                   <TextView
+                android:id="@+id/pup_ice_rain_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/temp_icon"
+                android:drawablePadding="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="0"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/white"/>
+
+
+
+
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
