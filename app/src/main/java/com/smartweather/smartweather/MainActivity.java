@@ -56,7 +56,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-   private TextView tempTv,windTv,localityTv,weatherTypeTv,weatherDateTv,Title_todayDate,Title_tomorrowDate,Title_overmDate;
+   private TextView tempTv,windTv,localityTv,weatherTypeTv,weatherDateTv,Title_todayDate,Title_tomorrowDate,Title_overmDate,pop_temp_c,pop_temp_f,pop_cloud,pop_wind_speed,pop_uv,pop_sun_rise,pop_sun_set,pop_moon_rise,pop_moon_set;
    private CardView card_view_btn;
    private ImageView weatherIconImgv,searchBtn;
     private String search;
@@ -72,6 +72,13 @@ public class MainActivity extends AppCompatActivity {
     Gson gson = new Gson();
     private String cnvtdTime, today_title_date;
     String city = "";
+    private JSONObject result,condition;
+    private JSONObject current;
+   private int temp;
+    private int tempF;
+   private int windSpeed;
+   private String text;
+   private JSONObject today;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +121,21 @@ public class MainActivity extends AppCompatActivity {
     private void showPopUp() {
         AlertDialog.Builder dilogBuilder = new AlertDialog.Builder(this);
         final View view = getLayoutInflater().inflate(popup_card_weather,null);
+        //Finding through id
+        pop_temp_c =view.findViewById(R.id.pup_temp_c_id);
+        pop_temp_f = view.findViewById(R.id.pup_temp_f_id);
+        pop_cloud = view.findViewById(R.id.pup_wind_speed_id);
+        pop_wind_speed = view.findViewById(R.id.pup_wind_speed_id);
+        pop_uv = view.findViewById(R.id.pup_uv_id);
+        pop_moon_rise=view.findViewById(R.id.pup_moon_rise_id);
+        pop_moon_set =view.findViewById(R.id.pup_moon_set_id);
+        pop_sun_rise = view.findViewById(R.id.pup_sun_rise_id);
+        pop_sun_set = view.findViewById(R.id.pup_sun_set_id);
+
+        //Setting data to pop up window
+
+        setToPopup();
+
         dilogBuilder.setView(view);
         AlertDialog dialog = dilogBuilder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -205,21 +227,23 @@ public class MainActivity extends AppCompatActivity {
                 if (response!=null){
 
                     try {
-                        JSONObject result = response.getJSONObject("location");
+                        result = response.getJSONObject("location");
                         String city_name = result.getString("name");
                         String localtime = result.getString("localtime");
 
 
 
-                        JSONObject current = response.getJSONObject("current");
-                        JSONObject condition = current.getJSONObject("condition");
-                        int temp = current.getInt("temp_c");
-                        int windSpeed = current.getInt("wind_kph");
-
+                        current = response.getJSONObject("current");
+                        condition = current.getJSONObject("condition");
+                        temp = current.getInt("temp_c");
+                        tempF = current.getInt("temp_f");
+                        windSpeed = current.getInt("wind_kph");
+                        text = condition.getString("text");
+                        String url = condition.getString("icon");
 
                         JSONObject forecast = response.getJSONObject("forecast");
                         JSONArray forecastday = forecast.getJSONArray("forecastday");
-                        JSONObject today = forecastday.getJSONObject(0);
+                        today = forecastday.getJSONObject(0);
                         JSONArray tdy_hour = today.getJSONArray("hour");
 
 
@@ -236,9 +260,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                        String text = condition.getString("text");
-                        String url = condition.getString("icon");
+
                         String today_date=today.getString("date");
+
 
 
 
@@ -265,6 +289,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setToPopup() {
+       int _uv = 0;
+        try {
+            _uv = current.getInt("uv");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String sun_rise = null,sun_set = null,moon_rise = null,moon_set = null;
+        try {
+            JSONObject  astro = today.getJSONObject("astro");
+            sun_rise = astro.getString("sunrise");
+            sun_set = astro.getString("sunset");
+            moon_rise = astro.getString("moonrise");
+            moon_set = astro.getString("moonset");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        pop_temp_c.setText(String.valueOf(temp)+" °C");
+        pop_temp_f.setText(String.valueOf(tempF)+" °F");
+        pop_wind_speed.setText(String.valueOf(windSpeed)+" km/h");
+        pop_cloud.setText(text);
+        pop_uv.setText(String.valueOf(_uv));
+        pop_sun_rise.setText(sun_rise);
+        pop_sun_set.setText(sun_set);
+       pop_moon_rise.setText(moon_rise);
+       pop_moon_set.setText(moon_set);
+    }
+
 
     private void setOvrmDate(String ovrm_date) {
         String date_s=ovrm_date;

@@ -95,7 +95,7 @@
                 android:id="@+id/pup_sun_rise_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/sun_set_white_icon"
+                android:drawableStart="@drawable/sun_rise_white"
                 android:drawablePadding="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:text="10:30 AM"
@@ -147,17 +147,17 @@
 
 
 
-                   <TextView
-                android:id="@+id/pup_ice_rain_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/temp_icon"
-                android:drawablePadding="@dimen/_15sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:text="0"
-                android:gravity="center"
-                android:textSize="@dimen/_12sdp"
-                android:textColor="@color/white"/>
+<!--                   <TextView-->
+<!--                android:id="@+id/pup_ice_rain_id"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:drawableStart="@drawable/small_ice"-->
+<!--                android:drawablePadding="@dimen/_15sdp"-->
+<!--                android:layout_marginTop="@dimen/_8sdp"-->
+<!--                android:text="0"-->
+<!--                android:gravity="center"-->
+<!--                android:textSize="@dimen/_12sdp"-->
+<!--                android:textColor="@color/white"/>-->
 
 
 
