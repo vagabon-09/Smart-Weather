@@ -5,6 +5,7 @@ This is a **weather forcasting** application. When any user download this applic
  - Weather Api
  - Java Programming Language
  - Picasoo 
+ - Facebook Shimmer Effect
 
 # Preview of Application
 
