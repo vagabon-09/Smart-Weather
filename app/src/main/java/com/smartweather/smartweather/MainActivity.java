@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
    private ShimmerFrameLayout card_fb_shimmer;
    private LinearLayout card_details,rv_parent_tday,tmrw_parent,over_shimmem_layout;
    private SwipeRefreshLayout mRefreshing;
+    AlertDialog dialog;
+    AlertDialog.Builder dilogBuilder;
     String base_url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
         //Start Shimmer
         card_fb_shimmer.startShimmer();
 //        rv_parent_tday.startShimmer();
-
-        //Retrive Data
+      dilogBuilder = new AlertDialog.Builder(this);
+        dialog = dilogBuilder.create();
 
         //Recycler View
         searchBtn();
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("ResourceType")
     private void showPopUp() {
-        AlertDialog.Builder dilogBuilder = new AlertDialog.Builder(this);
+
         final View view = getLayoutInflater().inflate(popup_card_weather,null);
         //Finding through id
         pop_temp_c =view.findViewById(R.id.pup_temp_c_id);
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         setToPopup();
 
         dilogBuilder.setView(view);
-        AlertDialog dialog = dilogBuilder.create();
+
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         ((ViewGroup) dialog.getWindow().getDecorView()).getChildAt(0).startAnimation(AnimationUtils.loadAnimation(
                 MainActivity.this,android.R.anim.slide_in_left));
@@ -195,12 +197,19 @@ public class MainActivity extends AppCompatActivity {
                 getCity();
             }
         }else{
-            Toast.makeText(this, "Please Enable GPS..", Toast.LENGTH_SHORT).show();
+           gpsDialog();
         }
         
 
         return "https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q="+city+"&days=10&aqi=yes&alerts=yes";
 
+    }
+
+    private void gpsDialog() {
+        View view = getLayoutInflater().inflate(R.layout.gps_alert,null);
+        dialog.setView(view);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 
     private void getCity() {
