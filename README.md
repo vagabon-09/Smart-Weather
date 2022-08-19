@@ -8,6 +8,5 @@ This is a **weather forcasting** application. When any user download this applic
 
 # Preview of Application
 
-![git_weather_](https://user-images.githubusercontent.com/89797141/185196787-636a7a92-82b5-4b2b-aa93-e92dc477f848.jpg)
 
-
+![fr_project](https://user-images.githubusercontent.com/89797141/185447958-30d3bf40-b768-42d0-aadd-876b39e6edc3.jpg)
