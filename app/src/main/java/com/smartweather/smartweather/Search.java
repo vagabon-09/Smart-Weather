@@ -64,6 +64,7 @@ private final int REQUEST_CODE_EXTRA_INPUT =1;
             if(resultCode == RESULT_OK && data!=null){
                 ArrayList<String> arrayList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 search_field.setText(Objects.requireNonNull(arrayList).get(0));
+
             }
         }
     }

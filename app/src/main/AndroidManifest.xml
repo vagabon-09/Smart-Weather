@@ -4,8 +4,9 @@
     package="com.smartweather.smartweather">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,7 @@
         android:roundIcon="@mipmap/smrt_weather_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartWeather"
-        tools:targetApi="31">
+        tools:targetApi="25">
         <activity
             android:name=".Search"
             android:exported="false" />
@@ -31,9 +32,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
     </application>
 
 </manifest>

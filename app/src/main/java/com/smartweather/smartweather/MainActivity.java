@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.smartweather.smartweather.Adapter.overmorrowAdapter;
 import com.smartweather.smartweather.Adapter.tomorrowAdapter;
@@ -79,14 +82,27 @@ public class MainActivity extends AppCompatActivity {
    private int windSpeed;
    private String text;
    private JSONObject today;
+   private ShimmerFrameLayout card_fb_shimmer;
+   private LinearLayout card_details,rv_parent_tday,tmrw_parent,over_shimmem_layout;
+   private SwipeRefreshLayout mRefreshing;
+    String base_url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Remove status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         //Find View
         findById();
+        //hide card details
+        card_details.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        tmr_rv.setVisibility(View.GONE);
+        //Start Shimmer
+        card_fb_shimmer.startShimmer();
+//        rv_parent_tday.startShimmer();
+
         //Retrive Data
 
         //Recycler View
@@ -94,27 +110,44 @@ public class MainActivity extends AppCompatActivity {
         //Get search value
         getSearchValue();
         //get weather forecast data according to the search data
-        String base_url;
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        mRefreshing = findViewById(R.id.refresh_id);
+       mRefreshing.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+           @Override
+           public void onRefresh() {
+               mRefreshing.setRefreshing(false);
+               base_url =givePermissions();
+               getData(base_url);
+           }
+       });
+
         if (search!=null){
             base_url ="https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q="+search+"&days=10&aqi=yes&alerts=yes";
             getData(base_url);
         }else{
-            givePermissions();
-            base_url ="https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q="+city+"&days=10&aqi=yes&alerts=yes";
+            base_url =givePermissions();
             getData(base_url);
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,true));
         tmr_rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,true));
         ovrm_rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,true));
-
+        
+       
         card_view_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopUp();
+                if (result!=null){
+                    showPopUp();
+                }else{
+                    Toast.makeText(MainActivity.this, "Wait until data loaded..", Toast.LENGTH_SHORT).show();
+                }
+               
             }
         });
-
+        View view = getLayoutInflater().inflate(R.layout.recycler_view_card_shimmen,null);
+        ShimmerFrameLayout sfl = view.findViewById(R.id.shimmer_rv_card_id);
+        sfl.stopShimmer();
     }
 
     @SuppressLint("ResourceType")
@@ -124,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         //Finding through id
         pop_temp_c =view.findViewById(R.id.pup_temp_c_id);
         pop_temp_f = view.findViewById(R.id.pup_temp_f_id);
-        pop_cloud = view.findViewById(R.id.pup_wind_speed_id);
+        pop_cloud = view.findViewById(R.id.pup_weather_type_id);
         pop_wind_speed = view.findViewById(R.id.pup_wind_speed_id);
         pop_uv = view.findViewById(R.id.pup_uv_id);
         pop_moon_rise=view.findViewById(R.id.pup_moon_rise_id);
@@ -146,22 +179,27 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Asking users for Location Access..
-    private void givePermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+    private String givePermissions() {
+        boolean gpsEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (gpsEnable){
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(MainActivity.this, "Please give location access...", Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
+            }
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
                 allPermission();
             }else{
-            locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            getCity();
+
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                getCity();
+            }
+        }else{
+            Toast.makeText(this, "Please Enable GPS..", Toast.LENGTH_SHORT).show();
         }
+        
 
-
+        return "https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q="+city+"&days=10&aqi=yes&alerts=yes";
 
     }
 
@@ -225,6 +263,15 @@ public class MainActivity extends AppCompatActivity {
                 weatherDataArrayList2 = new ArrayList<>();
 
                 if (response!=null){
+                    card_fb_shimmer.stopShimmer();
+                    card_fb_shimmer.setVisibility(View.GONE);
+                    card_details.setVisibility(View.VISIBLE);
+                    rv_parent_tday.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    tmrw_parent.setVisibility(View.GONE);
+                    tmr_rv.setVisibility(View.VISIBLE);
+                    over_shimmem_layout.setVisibility(View.GONE);
+                    ovrm_rv.setVisibility(View.VISIBLE);
 
                     try {
                         result = response.getJSONObject("location");
@@ -407,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
                 //Setting adapter
                 weatherAdapter adapter = new weatherAdapter(MainActivity.this, weatherDataList, conditonDataArrayList);
                 recyclerView.setAdapter(adapter);
-//                Log.d("Today Hour", "todaySetData: "+tdyData.toString());
+        //        Log.d("Today Hour", "todaySetData: "+tdyData.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -475,6 +522,10 @@ public class MainActivity extends AppCompatActivity {
         Title_overmDate = findViewById(R.id.trd_date_title_id);
         searchBtn = findViewById(R.id.search_button_id);
         card_view_btn = findViewById(R.id.card1);
-
+        card_fb_shimmer = findViewById(R.id.crd_fb_shimmer_id);
+        card_details = findViewById(R.id.card_details_id);
+        rv_parent_tday = findViewById(R.id.rv_shimmen_card_layout_id);
+        tmrw_parent = findViewById(R.id.tmrw_card_shimmem_id);
+        over_shimmem_layout = findViewById(R.id.overm_shimmen_layout_id);
     }
 }

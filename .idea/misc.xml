@@ -7,9 +7,12 @@
         <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/drawable/search_bar.xml" value="0.1405" />
         <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/font/font.xml" value="0.294921875" />
         <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/layout/activity_main.xml" value="0.21979166666666666" />
+        <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/layout/activity_permission.xml" value="0.23020833333333332" />
         <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/layout/activity_search.xml" value="0.21822916666666667" />
         <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/layout/activity_splash_screen.xml" value="0.21822916666666667" />
         <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/layout/popup_card_weather.xml" value="0.23020833333333332" />
+        <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/layout/recycler_view_card_shimmen.xml" value="0.23020833333333332" />
+        <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/layout/shimmer_card.xml" value="0.23020833333333332" />
         <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/layout/single_view.xml" value="0.23125" />
         <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.188" />
         <entry key="..\:/Android Devlopment/SmartWeather/app/src/main/res/mipmap-anydpi-v26/smrt_weather_icon.xml" value="0.188" />

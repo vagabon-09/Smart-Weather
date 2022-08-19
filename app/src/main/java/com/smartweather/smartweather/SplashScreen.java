@@ -1,8 +1,11 @@
 package com.smartweather.smartweather;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
@@ -21,6 +24,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
         //Removing status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //Finding through id
@@ -29,8 +33,10 @@ public class SplashScreen extends AppCompatActivity {
         setAnimation();
         //For animation background background
         animateBackground();
+
         //For splashing screen
         splash();
+
 
     }
 
@@ -40,6 +46,7 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 Intent splash = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(splash);
                 finish();

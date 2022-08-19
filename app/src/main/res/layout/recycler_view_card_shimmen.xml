@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_110sdp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_10sdp"
+    android:layout_marginEnd="@dimen/_5sdp"
+    android:backgroundTint="@color/shade_blue"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:layout_marginBottom="@dimen/_5sdp"
+    app:cardCornerRadius="@dimen/_10sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_rv_card_id"
+        app:shimmer_shape="radial"
+        app:shimmer_auto_start="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_margin="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/white"
+                android:background="@color/white"
+                android:gravity="center" />
+
+            <ImageView
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@color/white"
+                android:gravity="center" />
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/white"
+                android:background="@color/white"
+                android:gravity="center" />
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_16sdp"
+                android:drawableStart="@drawable/wind_white_icon"
+                android:gravity="center"
+                android:drawablePadding="@dimen/_5sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@color/white"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_16sdp"
+                android:background="@color/white"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"/>
+
+
+
+
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+</androidx.cardview.widget.CardView>
