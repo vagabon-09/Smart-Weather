@@ -59,9 +59,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-   private TextView tempTv,windTv,localityTv,weatherTypeTv,weatherDateTv,Title_todayDate,Title_tomorrowDate,Title_overmDate,pop_temp_c,pop_temp_f,pop_cloud,pop_wind_speed,pop_uv,pop_sun_rise,pop_sun_set,pop_moon_rise,pop_moon_set;
-   private CardView card_view_btn;
-   private ImageView weatherIconImgv,searchBtn;
+    private TextView tempTv, windTv, localityTv, weatherTypeTv, weatherDateTv, Title_todayDate, Title_tomorrowDate, Title_overmDate, pop_temp_c, pop_temp_f, pop_cloud, pop_wind_speed, pop_uv, pop_sun_rise, pop_sun_set, pop_moon_rise, pop_moon_set;
+    private CardView card_view_btn;
+    private ImageView weatherIconImgv, searchBtn;
     private String search;
     int REQUEST_CODE = 101;
     LocationManager locationManager;
@@ -70,30 +70,29 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<weatherData> weatherDataList;
     private ArrayList<weatherData> weatherDataArrayList1;
     private ArrayList<weatherData> weatherDataArrayList2;
-    private ArrayList<conditonData>conditonDataArrayList;
-    private RecyclerView recyclerView,tmr_rv,ovrm_rv;
+    private ArrayList<conditonData> conditonDataArrayList;
+    private RecyclerView recyclerView, tmr_rv, ovrm_rv;
     Gson gson = new Gson();
     private String cnvtdTime, today_title_date;
     String city = "";
-    private JSONObject result,condition;
+    private JSONObject result, condition;
     private JSONObject current;
-   private int temp;
+    private int temp;
     private int tempF;
-   private int windSpeed;
-   private String text;
-   private JSONObject today;
-   private ShimmerFrameLayout card_fb_shimmer;
-   private LinearLayout card_details,rv_parent_tday,tmrw_parent,over_shimmem_layout;
-   private SwipeRefreshLayout mRefreshing;
-    AlertDialog dialog;
-    AlertDialog.Builder dilogBuilder;
+    private int windSpeed;
+    private String text;
+    private JSONObject today;
+    private ShimmerFrameLayout card_fb_shimmer;
+    private LinearLayout card_details, rv_parent_tday, tmrw_parent, over_shimmem_layout;
+    private SwipeRefreshLayout mRefreshing;
     String base_url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Remove status bar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         //Find View
         findById();
@@ -104,8 +103,7 @@ public class MainActivity extends AppCompatActivity {
         //Start Shimmer
         card_fb_shimmer.startShimmer();
 //        rv_parent_tday.startShimmer();
-      dilogBuilder = new AlertDialog.Builder(this);
-        dialog = dilogBuilder.create();
+
 
         //Recycler View
         searchBtn();
@@ -114,68 +112,69 @@ public class MainActivity extends AppCompatActivity {
         //get weather forecast data according to the search data
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
         mRefreshing = findViewById(R.id.refresh_id);
-       mRefreshing.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-           @Override
-           public void onRefresh() {
-               mRefreshing.setRefreshing(false);
-               base_url =givePermissions();
-               getData(base_url);
-           }
-       });
+        mRefreshing.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mRefreshing.setRefreshing(false);
+                base_url = givePermissions();
+                getData(base_url);
+            }
+        });
 
-        if (search!=null){
-            base_url ="https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q="+search+"&days=10&aqi=yes&alerts=yes";
+        if (search != null) {
+            base_url = "https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q=" + search + "&days=10&aqi=yes&alerts=yes";
             getData(base_url);
-        }else{
-            base_url =givePermissions();
+        } else {
+            base_url = givePermissions();
             getData(base_url);
         }
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,true));
-        tmr_rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,true));
-        ovrm_rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,true));
-        
-       
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        tmr_rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        ovrm_rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+
+
         card_view_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (result!=null){
+                if (result != null) {
                     showPopUp();
-                }else{
+                } else {
                     Toast.makeText(MainActivity.this, "Wait until data loaded..", Toast.LENGTH_SHORT).show();
                 }
-               
+
             }
         });
-        View view = getLayoutInflater().inflate(R.layout.recycler_view_card_shimmen,null);
+        View view = getLayoutInflater().inflate(R.layout.recycler_view_card_shimmen, null);
         ShimmerFrameLayout sfl = view.findViewById(R.id.shimmer_rv_card_id);
         sfl.stopShimmer();
     }
 
     @SuppressLint("ResourceType")
     private void showPopUp() {
+        AlertDialog.Builder dilogBuilder = new AlertDialog.Builder(this);
 
-        final View view = getLayoutInflater().inflate(popup_card_weather,null);
+        final View view = getLayoutInflater().inflate(popup_card_weather, null);
+
         //Finding through id
-        pop_temp_c =view.findViewById(R.id.pup_temp_c_id);
+        pop_temp_c = view.findViewById(R.id.pup_temp_c_id);
         pop_temp_f = view.findViewById(R.id.pup_temp_f_id);
         pop_cloud = view.findViewById(R.id.pup_weather_type_id);
         pop_wind_speed = view.findViewById(R.id.pup_wind_speed_id);
         pop_uv = view.findViewById(R.id.pup_uv_id);
-        pop_moon_rise=view.findViewById(R.id.pup_moon_rise_id);
-        pop_moon_set =view.findViewById(R.id.pup_moon_set_id);
+        pop_moon_rise = view.findViewById(R.id.pup_moon_rise_id);
+        pop_moon_set = view.findViewById(R.id.pup_moon_set_id);
         pop_sun_rise = view.findViewById(R.id.pup_sun_rise_id);
         pop_sun_set = view.findViewById(R.id.pup_sun_set_id);
 
         //Setting data to pop up window
-
         setToPopup();
 
         dilogBuilder.setView(view);
-
+        AlertDialog dialog = dilogBuilder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         ((ViewGroup) dialog.getWindow().getDecorView()).getChildAt(0).startAnimation(AnimationUtils.loadAnimation(
-                MainActivity.this,android.R.anim.slide_in_left));
+                MainActivity.this, android.R.anim.slide_in_left));
         dialog.show();
     }
 
@@ -183,43 +182,45 @@ public class MainActivity extends AppCompatActivity {
     //Asking users for Location Access..
     private String givePermissions() {
         boolean gpsEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (gpsEnable){
+        if (gpsEnable) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
             }
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 allPermission();
-            }else{
+            } else {
 
                 location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 getCity();
             }
-        }else{
-           gpsDialog();
-        }
-        
 
-        return "https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q="+city+"&days=10&aqi=yes&alerts=yes";
+        } else {
+            gpsDialog();
+        }
+
+        return "https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q=" + city + "&days=10&aqi=yes&alerts=yes";
 
     }
 
     private void gpsDialog() {
+        AlertDialog.Builder Adialog = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.gps_alert,null);
-        dialog.setView(view);
+        Adialog.setView(view);
+        AlertDialog dialog = Adialog.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 
     private void getCity() {
-        if (location!=null){
+        if (location != null) {
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             try {
-                addressList = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 city = addressList.get(0).getLocality();
-                Log.d("Locality ", "getLocation: "+city);
-                Log.d("AddressList ", "getLocation: "+addressList.toString());
+                Log.d("Locality ", "getLocation: " + city);
+                Log.d("AddressList ", "getLocation: " + addressList.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -236,15 +237,15 @@ public class MainActivity extends AppCompatActivity {
 
                 givePermissions();
             }
-        },3000);
+        }, 3000);
     }
 
 
     //Getting search value form search bar
     private void getSearchValue() {
-      Intent intent = getIntent();
-      search = intent.getStringExtra("rj");
-        Log.d("Search_m", "getSearchValue: "+search);
+        Intent intent = getIntent();
+        search = intent.getStringExtra("rj");
+        Log.d("Search_m", "getSearchValue: " + search);
     }
 
     //Search button
@@ -252,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),Search.class);
+                Intent intent = new Intent(getApplicationContext(), Search.class);
                 startActivity(intent);
             }
         });
@@ -271,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 weatherDataArrayList1 = new ArrayList<>();
                 weatherDataArrayList2 = new ArrayList<>();
 
-                if (response!=null){
+                if (response != null) {
                     card_fb_shimmer.stopShimmer();
                     card_fb_shimmer.setVisibility(View.GONE);
                     card_details.setVisibility(View.VISIBLE);
@@ -288,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
                         String localtime = result.getString("localtime");
 
 
-
                         current = response.getJSONObject("current");
                         condition = current.getJSONObject("condition");
                         temp = current.getInt("temp_c");
@@ -303,7 +303,6 @@ public class MainActivity extends AppCompatActivity {
                         JSONArray tdy_hour = today.getJSONArray("hour");
 
 
-
                         JSONObject tomorrow = forecastday.getJSONObject(1);
                         JSONArray tomorrow_hour = tomorrow.getJSONArray("hour");
                         String tmrw_date = tomorrow.getString("date");
@@ -311,15 +310,11 @@ public class MainActivity extends AppCompatActivity {
 
                         JSONObject overmorrow = forecastday.getJSONObject(2);
                         JSONArray overmorrow_hour = overmorrow.getJSONArray("hour");
-                        String ovrm_date=overmorrow.getString("date");
+                        String ovrm_date = overmorrow.getString("date");
                         setOvrmDate(ovrm_date);
 
 
-
-
-                        String today_date=today.getString("date");
-
-
+                        String today_date = today.getString("date");
 
 
                         //Today add data
@@ -329,33 +324,33 @@ public class MainActivity extends AppCompatActivity {
                         //Setting Overmorrow data
                         overmorrowData(overmorrow_hour);
                         //setting data to view
-                        setData(city_name,localtime,text,url,temp,windSpeed,today_date);
+                        setData(city_name, localtime, text, url, temp, windSpeed, today_date);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     Toast.makeText(MainActivity.this, "Sorry...", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onError(ANError anError) {
-                Log.d("Error", "Error after Response: "+anError.toString());
+                Log.d("Error", "Error after Response: " + anError.toString());
             }
         });
     }
 
     private void setToPopup() {
-       int _uv = 0;
+        int _uv = 0;
         try {
             _uv = current.getInt("uv");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String sun_rise = null,sun_set = null,moon_rise = null,moon_set = null;
+        String sun_rise = null, sun_set = null, moon_rise = null, moon_set = null;
         try {
-            JSONObject  astro = today.getJSONObject("astro");
+            JSONObject astro = today.getJSONObject("astro");
             sun_rise = astro.getString("sunrise");
             sun_set = astro.getString("sunset");
             moon_rise = astro.getString("moonrise");
@@ -364,24 +359,24 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        pop_temp_c.setText(String.valueOf(temp)+" °C");
-        pop_temp_f.setText(String.valueOf(tempF)+" °F");
-        pop_wind_speed.setText(String.valueOf(windSpeed)+" km/h");
+        pop_temp_c.setText(String.valueOf(temp) + " °C");
+        pop_temp_f.setText(String.valueOf(tempF) + " °F");
+        pop_wind_speed.setText(String.valueOf(windSpeed) + " km/h");
         pop_cloud.setText(text);
         pop_uv.setText(String.valueOf(_uv));
         pop_sun_rise.setText(sun_rise);
         pop_sun_set.setText(sun_set);
-       pop_moon_rise.setText(moon_rise);
-       pop_moon_set.setText(moon_set);
+        pop_moon_rise.setText(moon_rise);
+        pop_moon_set.setText(moon_set);
     }
 
 
     private void setOvrmDate(String ovrm_date) {
-        String date_s=ovrm_date;
+        String date_s = ovrm_date;
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try {
-            date=dt.parse(date_s);
+            date = dt.parse(date_s);
             SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yy");
             String ovr_date = dt1.format(date);
             Title_overmDate.setText(ovr_date);
@@ -392,11 +387,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void setTmrDate(String tmrw_date) {
 //        Log.d("s_date", "setTmrDate: "+tmrw_date);
-        String date_s=tmrw_date;
+        String date_s = tmrw_date;
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-        Date date =null;
+        Date date = null;
         try {
-            date=dt.parse(date_s);
+            date = dt.parse(date_s);
             SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yy");
             String f_date = dt1.format(date);
 //            Log.d("F_date", "setTmrDate: "+f_date);
@@ -409,12 +404,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void overmorrowData(JSONArray overmorrow_hour) {
         ArrayList<conditonData> conditonDataArrayList2 = new ArrayList<>();
-        for (int i=overmorrow_hour.length()-1; i>=0; i--){
+        for (int i = overmorrow_hour.length() - 1; i >= 0; i--) {
             try {
                 JSONObject overmorrow_array = overmorrow_hour.getJSONObject(i);
                 weatherData overmorrow_data = gson.fromJson(overmorrow_array.toString(), weatherData.class);
                 JSONObject overmorrow_condition = overmorrow_array.getJSONObject("condition");
-                conditonData overmorrow_condition_view  = gson.fromJson(overmorrow_condition.toString(),conditonData.class);
+                conditonData overmorrow_condition_view = gson.fromJson(overmorrow_condition.toString(), conditonData.class);
                 conditonDataArrayList2.add(overmorrow_condition_view);
                 weatherDataArrayList2.add(overmorrow_data);
                 overmorrowAdapter adapter3 = new overmorrowAdapter(weatherDataArrayList2, conditonDataArrayList2, MainActivity.this);
@@ -429,13 +424,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void tomorrowData(JSONArray tomorrow_hour) {
         ArrayList<conditonData> conditonDataArrayList1 = new ArrayList<>();
-        for (int i=tomorrow_hour.length()-1; i>=0;i--){
+        for (int i = tomorrow_hour.length() - 1; i >= 0; i--) {
 
             try {
-                JSONObject tomorrowData=tomorrow_hour.getJSONObject(i);
-                JSONObject tmr_condition=tomorrowData.getJSONObject("condition");
-                conditonData tmr_condition_view = gson.fromJson(tmr_condition.toString(),conditonData.class);
-                weatherData tomorrow_data=gson.fromJson(tomorrowData.toString(),weatherData.class);
+                JSONObject tomorrowData = tomorrow_hour.getJSONObject(i);
+                JSONObject tmr_condition = tomorrowData.getJSONObject("condition");
+                conditonData tmr_condition_view = gson.fromJson(tmr_condition.toString(), conditonData.class);
+                weatherData tomorrow_data = gson.fromJson(tomorrowData.toString(), weatherData.class);
                 //For tomorrow condition
                 conditonDataArrayList1.add(tmr_condition_view);
                 //For tomorrow data
@@ -452,18 +447,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void todaySetData(JSONArray tdy_hour) {
-        for (int i=tdy_hour.length()-1; i>=0;i--){
+        for (int i = tdy_hour.length() - 1; i >= 0; i--) {
             try {
                 JSONObject tdyData = tdy_hour.getJSONObject(i);
                 JSONObject condition = tdyData.getJSONObject("condition");
-                weatherData today_weather = gson.fromJson(tdyData.toString(),weatherData.class);
-                conditonData condito_data = gson.fromJson(condition.toString(),conditonData.class);
+                weatherData today_weather = gson.fromJson(tdyData.toString(), weatherData.class);
+                conditonData condito_data = gson.fromJson(condition.toString(), conditonData.class);
                 weatherDataList.add(today_weather);
                 conditonDataArrayList.add(condito_data);
                 //Setting adapter
                 weatherAdapter adapter = new weatherAdapter(MainActivity.this, weatherDataList, conditonDataArrayList);
                 recyclerView.setAdapter(adapter);
-        //        Log.d("Today Hour", "todaySetData: "+tdyData.toString());
+                //        Log.d("Today Hour", "todaySetData: "+tdyData.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -472,16 +467,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Setting data to Views
-    private void setData(String city,String localTime,String weatherType,String url,int temp,int windSpeed, String today_date) {
+    private void setData(String city, String localTime, String weatherType, String url, int temp, int windSpeed, String today_date) {
 
         convetTime(localTime);
         convetTime2(today_date);
         localityTv.setText(city);
-        weatherDateTv.setText("Last updated at: " +cnvtdTime);
+        weatherDateTv.setText("Last updated at: " + cnvtdTime);
         weatherTypeTv.setText(weatherType);
-        Picasso.get().load("https:"+url).into(weatherIconImgv);
-        tempTv.setText(String.valueOf(temp+" °C"));
-        windTv.setText(String.valueOf(windSpeed)+" km/h");
+        Picasso.get().load("https:" + url).into(weatherIconImgv);
+        tempTv.setText(String.valueOf(temp + " °C"));
+        windTv.setText(String.valueOf(windSpeed) + " km/h");
         Title_todayDate.setText(today_title_date);
     }
 
