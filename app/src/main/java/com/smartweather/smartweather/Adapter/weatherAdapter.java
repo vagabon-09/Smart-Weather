@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.smartweather.smartweather.Animation.Animation;
 import com.smartweather.smartweather.DataModel.conditonData;
 import com.smartweather.smartweather.DataModel.weatherData;
 import com.smartweather.smartweather.R;
@@ -24,6 +25,7 @@ public class weatherAdapter extends RecyclerView.Adapter<weatherAdapter.MyViewHo
     Context context;
     ArrayList<weatherData> weatherDataArrayList;
     ArrayList<conditonData>conditonDataArrayList;
+    Animation anim;
     String cvrTime;
 //    add this after creating conditon data
 
@@ -58,6 +60,8 @@ public class weatherAdapter extends RecyclerView.Adapter<weatherAdapter.MyViewHo
         holder.v_windSpeed.setText(weatherDataArrayList.get(position).getWind_kph()+" km/h");
         holder.v_weatherType.setText(conditonDataArrayList.get(position).getText());
         Picasso.get().load("https:"+conditonDataArrayList.get(position).getIcon()).into(holder.v_weatherIconIv);
+        anim = new Animation();
+        anim.recyclerAnimation(context.getApplicationContext(),holder.itemView,position);
     }
 
     private void convertDate(String time) {

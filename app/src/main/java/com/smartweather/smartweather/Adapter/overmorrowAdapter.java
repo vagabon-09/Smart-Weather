@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.smartweather.smartweather.Animation.Animation;
 import com.smartweather.smartweather.DataModel.conditonData;
 import com.smartweather.smartweather.DataModel.weatherData;
 import com.smartweather.smartweather.R;
@@ -24,6 +25,7 @@ public class overmorrowAdapter extends RecyclerView.Adapter<overmorrowAdapter.My
     ArrayList<weatherData> weatherDataArrayList;
     ArrayList<conditonData> conditonDataArrayList;
     Context context;
+    Animation anim;
     String f_time;
 
     public overmorrowAdapter(ArrayList<weatherData> weatherDataArrayList, ArrayList<conditonData> conditonDataArrayList, Context context) {
@@ -47,6 +49,10 @@ public class overmorrowAdapter extends RecyclerView.Adapter<overmorrowAdapter.My
         holder.o_windSpeed.setText(weatherDataArrayList.get(position).getWind_kph()+" km/h");
         holder.o_weatherType.setText(conditonDataArrayList.get(position).getText());
         Picasso.get().load("https:"+conditonDataArrayList.get(position).getIcon()).into(holder.o_weatherIcon);
+
+        //Setting Animation
+        anim = new Animation();
+        anim.recyclerAnimation(context.getApplicationContext(),holder.itemView,position);
     }
 
     private void timeFormat(String time) {
