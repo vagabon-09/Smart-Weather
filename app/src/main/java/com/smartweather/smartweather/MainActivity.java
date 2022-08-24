@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<conditonData> conditonDataArrayList;
     private RecyclerView recyclerView, tmr_rv, ovrm_rv;
     Gson gson = new Gson();
-    private String cnvtdTime, today_title_date;
     String city = "";
     private JSONObject result, condition;
     private JSONObject current;
@@ -86,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout card_details, rv_parent_tday, tmrw_parent, over_shimmem_layout;
     private SwipeRefreshLayout mRefreshing;
     String base_url;
+    DateFormatter dateFormatter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         card_details.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
         tmr_rv.setVisibility(View.GONE);
+        dateFormatter = new DateFormatter();
         //Start Shimmer
         card_fb_shimmer.startShimmer();
 //        rv_parent_tday.startShimmer();
@@ -112,13 +113,10 @@ public class MainActivity extends AppCompatActivity {
         //get weather forecast data according to the search data
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
         mRefreshing = findViewById(R.id.refresh_id);
-        mRefreshing.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mRefreshing.setRefreshing(false);
-                base_url = givePermissions();
-                getData(base_url);
-            }
+        mRefreshing.setOnRefreshListener(() -> {
+            mRefreshing.setRefreshing(false);
+            base_url = givePermissions();
+            getData(base_url);
         });
 
         if (search != null) {
@@ -145,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        View view = getLayoutInflater().inflate(R.layout.recycler_view_card_shimmen, null);
+        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.recycler_view_card_shimmen, null);
         ShimmerFrameLayout sfl = view.findViewById(R.id.shimmer_rv_card_id);
         sfl.stopShimmer();
     }
@@ -231,13 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void allPermission() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                givePermissions();
-            }
-        }, 3000);
+        new Handler().postDelayed(this::givePermissions, 3000);
     }
 
 
@@ -372,6 +364,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setOvrmDate(String ovrm_date) {
+
+
         String date_s = ovrm_date;
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
@@ -386,19 +380,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setTmrDate(String tmrw_date) {
-//        Log.d("s_date", "setTmrDate: "+tmrw_date);
-        String date_s = tmrw_date;
-        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = dt.parse(date_s);
-            SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yy");
-            String f_date = dt1.format(date);
-//            Log.d("F_date", "setTmrDate: "+f_date);
-            Title_tomorrowDate.setText(f_date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        dateFormatter.formatTime(tmrw_date,"yyyy-MM-dd","dd-MM-yy",Title_tomorrowDate);
 
     }
 
@@ -414,7 +396,6 @@ public class MainActivity extends AppCompatActivity {
                 weatherDataArrayList2.add(overmorrow_data);
                 overmorrowAdapter adapter3 = new overmorrowAdapter(weatherDataArrayList2, conditonDataArrayList2, MainActivity.this);
                 ovrm_rv.setAdapter(adapter3);
-//                Log.d("Overmorrow", "overmorrowData: "+overmorrow_array.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -472,41 +453,20 @@ public class MainActivity extends AppCompatActivity {
         convetTime(localTime);
         convetTime2(today_date);
         localityTv.setText(city);
-        weatherDateTv.setText("Last updated at: " + cnvtdTime);
         weatherTypeTv.setText(weatherType);
         Picasso.get().load("https:" + url).into(weatherIconImgv);
         tempTv.setText(String.valueOf(temp + " °C"));
         windTv.setText(String.valueOf(windSpeed) + " km/h");
-        Title_todayDate.setText(today_title_date);
     }
 
     //Title Date
     private void convetTime2(String today_date) {
-        String date_s = today_date;
-        SimpleDateFormat dt = new SimpleDateFormat("yyyyy-MM-dd");
-        Date date2 = null;
-        try {
-            date2 = dt.parse(date_s);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yy");
-        today_title_date = dt1.format(date2);
+        dateFormatter.formatTime(today_date,"yyyyy-MM-dd","dd-MM-yy",Title_todayDate);
     }
 
     //Converting time for details card
     private void convetTime(String localTime) {
-        String date_s = localTime;
-        SimpleDateFormat dt = new SimpleDateFormat("yyyyy-MM-dd hh:mm");
-        Date date = null;
-        try {
-            date = dt.parse(date_s);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat dt1 = new SimpleDateFormat("hh:mm a");
-        cnvtdTime = dt1.format(date);
-
+        dateFormatter.formatTime(localTime,"yyyyy-MM-dd hh:mm","hh:mm a",weatherDateTv);
 
     }
 
