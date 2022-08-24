@@ -12,6 +12,8 @@ public class Animation {
             android.view.animation.Animation anim = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
             view.setAnimation(anim);
             lastPosition=position;
+
+
             Log.d("Position", "recyclerAnimation: "+position);
         }
         Log.d("Last Position","recyclerAnimation: "+lastPosition);
