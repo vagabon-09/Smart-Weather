@@ -121,11 +121,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (search != null) {
             base_url = "https://api.weatherapi.com/v1/forecast.json?key=ed7111cc88ee4769858141158222207&q=" + search + "&days=10&aqi=yes&alerts=yes";
-            getData(base_url);
         } else {
             base_url = givePermissions();
-            getData(base_url);
         }
+        getData(base_url);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
         tmr_rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
