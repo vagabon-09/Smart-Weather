@@ -51,10 +51,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -131,16 +128,13 @@ public class MainActivity extends AppCompatActivity {
         ovrm_rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
 
 
-        card_view_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (result != null) {
-                    showPopUp();
-                } else {
-                    Toast.makeText(MainActivity.this, "Wait until data loaded..", Toast.LENGTH_SHORT).show();
-                }
-
+        card_view_btn.setOnClickListener(view -> {
+            if (result != null) {
+                showPopUp();
+            } else {
+                Toast.makeText(MainActivity.this, "Wait until data loaded..", Toast.LENGTH_SHORT).show();
             }
+
         });
         @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.recycler_view_card_shimmen, null);
         ShimmerFrameLayout sfl = view.findViewById(R.id.shimmer_rv_card_id);
@@ -241,12 +235,9 @@ public class MainActivity extends AppCompatActivity {
 
     //Search button
     private void searchBtn() {
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Search.class);
-                startActivity(intent);
-            }
+        searchBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Search.class);
+            startActivity(intent);
         });
 
     }
@@ -350,9 +341,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        pop_temp_c.setText(String.valueOf(temp) + " °C");
-        pop_temp_f.setText(String.valueOf(tempF) + " °F");
-        pop_wind_speed.setText(String.valueOf(windSpeed) + " km/h");
+        String temp_C_s = temp + " °C";
+        pop_temp_c.setText(temp_C_s);
+        String temp_s= tempF + " °F";
+        pop_temp_f.setText(temp_s);
+        String windSpeed_s = windSpeed + " km/h";
+        pop_wind_speed.setText(windSpeed_s);
         pop_cloud.setText(text);
         pop_uv.setText(String.valueOf(_uv));
         pop_sun_rise.setText(sun_rise);
@@ -363,19 +357,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setOvrmDate(String ovrm_date) {
+        dateFormatter.formatTime(ovrm_date,"yyyy-MM-dd","dd-MM-yy",Title_overmDate);
 
 
-        String date_s = ovrm_date;
-        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = dt.parse(date_s);
-            SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yy");
-            String ovr_date = dt1.format(date);
-            Title_overmDate.setText(ovr_date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
 
     private void setTmrDate(String tmrw_date) {
@@ -454,8 +438,10 @@ public class MainActivity extends AppCompatActivity {
         localityTv.setText(city);
         weatherTypeTv.setText(weatherType);
         Picasso.get().load("https:" + url).into(weatherIconImgv);
-        tempTv.setText(String.valueOf(temp + " °C"));
-        windTv.setText(String.valueOf(windSpeed) + " km/h");
+        String temp_s=temp + " °C";
+        tempTv.setText(temp_s);
+        String windSp_s= windSpeed + " km/h";
+        windTv.setText(windSp_s);
     }
 
     //Title Date

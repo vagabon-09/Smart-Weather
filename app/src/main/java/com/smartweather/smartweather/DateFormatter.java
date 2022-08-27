@@ -12,7 +12,7 @@ public class DateFormatter {
 
     public void formatTime(String time, String onFormat, String toFormat, TextView view){
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dt = new SimpleDateFormat(onFormat);
-        Date date = null;
+        Date date;
         try {
             date = dt.parse(time);
             @SuppressLint("SimpleDateFormat") SimpleDateFormat dt1 = new SimpleDateFormat(toFormat);
