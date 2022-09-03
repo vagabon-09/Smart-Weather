@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Asking users for Location Access..
+
     private String givePermissions() {
         boolean gpsEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (gpsEnable) {
