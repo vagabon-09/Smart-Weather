@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         //Remove status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        //Find View
+        //Finding View
         findById();
         //hide card details
         card_details.setVisibility(View.GONE);
