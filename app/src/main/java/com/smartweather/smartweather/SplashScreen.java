@@ -33,7 +33,7 @@ public class SplashScreen extends AppCompatActivity {
         setAnimation();
         //For animation background background
         animateBackground();
-
+//i am now changing here
         //For splashing screen
         splash();
 
