@@ -48,11 +48,13 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_id"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/_40sdp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_40sdp">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -306,11 +308,12 @@
                     </androidx.cardview.widget.CardView>
 
                     <LinearLayout
+                        android:id="@+id/parent_tomorrow_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_below="@+id/tomorrow_card_id"
-                        android:id="@+id/parent_tomorrow_id">
+                        android:orientation="vertical">
+
                         <LinearLayout
                             android:id="@+id/tmrw_card_shimmem_id"
                             android:layout_width="match_parent"
@@ -329,12 +332,11 @@
                             android:id="@+id/tomorrow_rv_id"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:layout_marginTop="12dp" />
+                            android:layout_marginTop="12dp"
+                            android:visibility="gone" />
 
 
                     </LinearLayout>
-
 
 
                     <androidx.cardview.widget.CardView
@@ -382,11 +384,10 @@
                     </androidx.cardview.widget.CardView>
 
 
-
                     <LinearLayout
+                        android:id="@+id/parent_overm_rv_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/parent_overm_rv_id"
                         android:layout_below="@+id/trd_card_id"
                         android:orientation="horizontal">
 
@@ -394,8 +395,8 @@
                             android:id="@+id/overm_rv_id"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:layout_below="@+id/trd_card_id" />
+                            android:layout_below="@+id/trd_card_id"
+                            android:visibility="gone" />
 
                         <LinearLayout
                             android:id="@+id/overm_shimmen_layout_id"
@@ -403,9 +404,11 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <include layout="@layout/recycler_view_card_shimmen"/>
-                            <include layout="@layout/recycler_view_card_shimmen"/>
-                            <include layout="@layout/recycler_view_card_shimmen"/>
+                            <include layout="@layout/recycler_view_card_shimmen" />
+
+                            <include layout="@layout/recycler_view_card_shimmen" />
+
+                            <include layout="@layout/recycler_view_card_shimmen" />
 
                         </LinearLayout>
 
