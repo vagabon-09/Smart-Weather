@@ -2,6 +2,7 @@ package com.smartweather.smartweather;
 
 import static com.smartweather.smartweather.R.layout.popup_card_weather;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -38,6 +39,17 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.gson.Gson;
 import com.smartweather.smartweather.Adapter.overmorrowAdapter;
 import com.smartweather.smartweather.Adapter.tomorrowAdapter;
@@ -83,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout mRefreshing;
     String base_url;
     DateFormatter dateFormatter;
+    private AdView mAdView;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +142,18 @@ public class MainActivity extends AppCompatActivity {
         ovrm_rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
 
 
+        /*
+         If some one click first card of the view then a popup window will show where some data will placed and before show
+        popup window a Interstitial Ad will show
+         */
+        // Popup button
         card_view_btn.setOnClickListener(view -> {
             if (result != null) {
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(MainActivity.this);
+                } else {
+                    Log.d("TAG", "The interstitial ad wasn't ready yet.");
+                }
                 showPopUp();
             } else {
                 Toast.makeText(MainActivity.this, "Wait until data loaded..", Toast.LENGTH_SHORT).show();
@@ -139,6 +163,122 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.recycler_view_card_shimmen, null);
         ShimmerFrameLayout sfl = view.findViewById(R.id.shimmer_rv_card_id);
         sfl.stopShimmer();
+        admobAds();
+    }
+
+    private void admobAds() {
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+            }
+        });
+        bannerAdd();
+        interstitialAd();
+    }
+
+    private void interstitialAd() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        InterstitialAd.load(this,"ca-app-pub-6126904020434443/2150604708", adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        mInterstitialAd = interstitialAd;
+                        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
+                            @Override
+                            public void onAdClicked() {
+                                // Called when a click is recorded for an ad.
+                                Log.d("TAG", "Ad was clicked.");
+                            }
+
+                            @Override
+                            public void onAdDismissedFullScreenContent() {
+                                // Called when ad is dismissed.
+                                // Set the ad reference to null so you don't show the ad a second time.
+                                Log.d("TAG", "Ad dismissed fullscreen content.");
+                                mInterstitialAd = null;
+                            }
+
+                            @Override
+                            public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                // Called when ad fails to show.
+                                Log.e("TAG", "Ad failed to show fullscreen content.");
+                                mInterstitialAd = null;
+                            }
+
+                            @Override
+                            public void onAdImpression() {
+                                // Called when an impression is recorded for an ad.
+                                Log.d("TAG", "Ad recorded an impression.");
+                            }
+
+                            @Override
+                            public void onAdShowedFullScreenContent() {
+                                // Called when ad is shown.
+                                Log.d("TAG", "Ad showed fullscreen content.");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        mInterstitialAd = null;
+                        super.onAdFailedToLoad(loadAdError);
+                        interstitialAd();
+                    }
+                });
+
+
+
+    }
+
+    private void bannerAdd() {
+        mAdView = findViewById(R.id.bannerAdd1);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+                super.onAdClicked();
+
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                super.onAdFailedToLoad(adError);
+                mAdView.loadAd(adRequest);
+            }
+
+            @Override
+            public void onAdImpression() {
+                // Code to be executed when an impression is recorded
+                // for an ad.
+            }
+
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                super.onAdLoaded();
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+        });
     }
 
     @SuppressLint("ResourceType")
@@ -164,8 +304,7 @@ public class MainActivity extends AppCompatActivity {
         dilogBuilder.setView(view);
         AlertDialog dialog = dilogBuilder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        ((ViewGroup) dialog.getWindow().getDecorView()).getChildAt(0).startAnimation(AnimationUtils.loadAnimation(
-                MainActivity.this, android.R.anim.slide_in_left));
+        ((ViewGroup) dialog.getWindow().getDecorView()).getChildAt(0).startAnimation(AnimationUtils.loadAnimation(MainActivity.this, android.R.anim.slide_in_left));
         dialog.show();
     }
 
@@ -175,12 +314,10 @@ public class MainActivity extends AppCompatActivity {
     private String givePermissions() {
         boolean gpsEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (gpsEnable) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
             }
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 allPermission();
             } else {
 
@@ -198,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void gpsDialog() {
         AlertDialog.Builder Adialog = new AlertDialog.Builder(this);
-        View view = getLayoutInflater().inflate(R.layout.gps_alert,null);
+        View view = getLayoutInflater().inflate(R.layout.gps_alert, null);
         Adialog.setView(view);
         AlertDialog dialog = Adialog.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -344,7 +481,7 @@ public class MainActivity extends AppCompatActivity {
 
         String temp_C_s = temp + " °C";
         pop_temp_c.setText(temp_C_s);
-        String temp_s= tempF + " °F";
+        String temp_s = tempF + " °F";
         pop_temp_f.setText(temp_s);
         String windSpeed_s = windSpeed + " km/h";
         pop_wind_speed.setText(windSpeed_s);
@@ -358,13 +495,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setOvrmDate(String ovrm_date) {
-        dateFormatter.formatTime(ovrm_date,"yyyy-MM-dd","dd-MM-yy",Title_overmDate);
+        dateFormatter.formatTime(ovrm_date, "yyyy-MM-dd", "dd-MM-yy", Title_overmDate);
 
 
     }
 
     private void setTmrDate(String tmrw_date) {
-        dateFormatter.formatTime(tmrw_date,"yyyy-MM-dd","dd-MM-yy",Title_tomorrowDate);
+        dateFormatter.formatTime(tmrw_date, "yyyy-MM-dd", "dd-MM-yy", Title_tomorrowDate);
 
     }
 
@@ -439,20 +576,20 @@ public class MainActivity extends AppCompatActivity {
         localityTv.setText(city);
         weatherTypeTv.setText(weatherType);
         Picasso.get().load("https:" + url).into(weatherIconImgv);
-        String temp_s=temp + " °C";
+        String temp_s = temp + " °C";
         tempTv.setText(temp_s);
-        String windSp_s= windSpeed + " km/h";
+        String windSp_s = windSpeed + " km/h";
         windTv.setText(windSp_s);
     }
 
     //Title Date
     private void convetTime2(String today_date) {
-        dateFormatter.formatTime(today_date,"yyyyy-MM-dd","dd-MM-yy",Title_todayDate);
+        dateFormatter.formatTime(today_date, "yyyyy-MM-dd", "dd-MM-yy", Title_todayDate);
     }
 
     //Converting time for details card
     private void convetTime(String localTime) {
-        dateFormatter.formatTime(localTime,"yyyyy-MM-dd hh:mm","hh:mm a",weatherDateTv);
+        dateFormatter.formatTime(localTime, "yyyyy-MM-dd hh:mm", "hh:mm a", weatherDateTv);
 
     }
 
@@ -478,4 +615,5 @@ public class MainActivity extends AppCompatActivity {
         tmrw_parent = findViewById(R.id.tmrw_card_shimmem_id);
         over_shimmem_layout = findViewById(R.id.overm_shimmen_layout_id);
     }
+
 }

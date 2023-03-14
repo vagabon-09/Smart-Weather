@@ -18,6 +18,8 @@
             app:cardPreventCornerOverlap="false"
             app:cardElevation="@dimen/_10sdp">
 
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -26,7 +28,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_18sdp"
                     android:layout_weight="1"
@@ -46,8 +48,11 @@
 
 
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
+
+
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_id"
@@ -74,7 +79,8 @@
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:backgroundTint="@color/shade_blue"
                     android:clickable="true"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    android:focusable="true">
 
                     <com.facebook.shimmer.ShimmerFrameLayout
                         android:id="@+id/crd_fb_shimmer_id"
@@ -91,7 +97,8 @@
                         android:id="@+id/card_details_id"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -181,12 +188,24 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <com.google.android.gms.ads.AdView
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/bannerAdd1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/card1"
+                    app:adSize="BANNER"
+                    android:layout_centerVertical="true"
+                    app:adUnitId="ca-app-pub-6126904020434443/9127346096" />
+
+
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/title_card_id"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
-                    android:layout_below="@+id/card1"
+                    android:layout_below="@+id/bannerAdd1"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
@@ -201,7 +220,7 @@
 
                         <TextView
                             android:id="@+id/today_title_id"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginStart="@dimen/_12sdp"
                             android:layout_weight="1"
@@ -412,14 +431,23 @@
 
                         </LinearLayout>
 
+
+
                     </LinearLayout>
+
+
+
 
                 </RelativeLayout>
 
 
+
+
             </RelativeLayout>
 
+
         </ScrollView>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
