@@ -42,6 +42,6 @@ Contributions are welcome! Please feel free to submit a pull request or open an 
 
 ## Contact
 
-If you have any questions or concerns, please contact the developer at [contact@clocktitan.com](mailto:rajeshbhadra62@gmail.com).
+If you have any questions or concerns, please contact the developer at [contact@smartweather.com](mailto:rajeshbhadra62@gmail.com).
 
 Thank you for using Smart Weather App!
